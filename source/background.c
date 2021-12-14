@@ -2207,10 +2207,10 @@ int background_initial_conditions(
 
     pvecback_integration[pba->index_bi_rho_fld] = rho_fld_today * exp(integral_fld);
 
-    if ( integral_fld != integral_fld) {
-      class_stop(pba->error_message,"Energy condition violated rho_fld < 0");
-    }
-
+    class_test(pvecback_integration[pba->index_bi_rho_fld] != pvecback_integration[pba->index_bi_rho_fld],
+               pba->error_message,
+               "rho_fld <0, Energy condition violated rho_fld should be strictly positive",
+               pvecback_integration[pba->index_bi_rho_fld]);
   }
 
   /** - Fix initial value of \f$ \phi, \phi' \f$
