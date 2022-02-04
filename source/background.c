@@ -2194,6 +2194,7 @@ int background_initial_conditions(
     /* rho_fld today */
     rho_fld_today = pba->Omega0_fld * pow(pba->H0,2);
 
+
     /* integrate rho_fld(a) from a_ini to a_0, to get rho_fld(a_ini) given rho_fld(a0) */
     class_call(background_w_fld(pba,a,&w_fld,&dw_over_da_fld,&integral_fld), pba->error_message, pba->error_message);
 

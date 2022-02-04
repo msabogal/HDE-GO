@@ -4215,8 +4215,6 @@ int perturbations_vector_init(
 
         if (pba->use_ppf == _FALSE_) {
 
-          /*printf("hola %d \n",11111);*/
-
           ppv->y[ppv->index_pt_delta_fld] =
             ppw->pv->y[ppw->pv->index_pt_delta_fld];
 
@@ -5272,7 +5270,17 @@ int perturbations_initial_conditions(struct precision * ppr,
 
         class_call(background_w_fld(pba,a,&w_fld,&dw_over_da_fld,&integral_fld), pba->error_message, ppt->error_message);
 
+        if (pba->has_GO == _TRUE_) {
+
+          pba->cs2_fld= (2.*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*(-2.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*pow(pba->beta_GO,2.)*pba->Omega0_r
+                + pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) )
+                /(3.*pba->beta_GO*(3.*pow(a,1.+2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(1.-pba->alpha_GO+2.*pba->beta_GO)*(-2.*pba->alpha_GO+3.*pba->beta_GO)*pba->Omega0_m
+                + 4.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(-pba->alpha_GO+2.*pba->beta_GO)*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*pba->Omega0_r
+                - 2.*pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) );
+        }
+
         if (pba->use_ppf == _FALSE_) {
+
           ppw->pv->y[ppw->pv->index_pt_delta_fld] = - ktau_two/4.*(1.+w_fld)*(4.-3.*pba->cs2_fld)/(4.-6.*w_fld+3.*pba->cs2_fld) * ppr->curvature_ini * s2_squared; /* from 1004.5509 */ //TBC: curvature
 
           ppw->pv->y[ppw->pv->index_pt_theta_fld] = - k*ktau_three/4.*pba->cs2_fld/(4.-6.*w_fld+3.*pba->cs2_fld) * ppr->curvature_ini * s2_squared; /* from 1004.5509 */ //TBC:curvature
@@ -6885,15 +6893,30 @@ int perturbations_total_stress_energy(
       class_call(background_w_fld(pba,a,&w_fld,&dw_over_da_fld,&integral_fld), pba->error_message, ppt->error_message);
       w_prime_fld = dw_over_da_fld * a_prime_over_a * a;
 
+      if (pba->has_GO == _TRUE_) {
+
+        pba->cs2_fld= (2.*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*(-2.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*pow(pba->beta_GO,2.)*pba->Omega0_r
+              + pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) )
+              /(3.*pba->beta_GO*(3.*pow(a,1.+2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(1.-pba->alpha_GO+2.*pba->beta_GO)*(-2.*pba->alpha_GO+3.*pba->beta_GO)*pba->Omega0_m
+              + 4.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(-pba->alpha_GO+2.*pba->beta_GO)*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*pba->Omega0_r
+              - 2.*pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) );
+      }
+
       if (pba->use_ppf == _FALSE_) {
         ppw->delta_rho_fld = ppw->pvecback[pba->index_bg_rho_fld]*y[ppw->pv->index_pt_delta_fld];
         ppw->rho_plus_p_theta_fld = (1.+w_fld)*ppw->pvecback[pba->index_bg_rho_fld]*y[ppw->pv->index_pt_theta_fld];
-	ca2_fld = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
+
+        if (pba->has_GO == _TRUE_) {
+          ca2_fld = pba->cs2_fld;
+        }
+        else {
+          ca2_fld = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
+        }
 	/** We must gauge transform the pressure perturbation from the fluid rest-frame to the gauge we are working in */
 	ppw->delta_p_fld = pba->cs2_fld * ppw->delta_rho_fld + (pba->cs2_fld-ca2_fld)*(3*a_prime_over_a*ppw->rho_plus_p_theta_fld/k/k);
       }
       else {
-        s2sq = ppw->s_l[2]*ppw->s_l[2];
+        s2sq = ppw->s_l[2]*ppw->s_l[2]; /*ver aqui*/
         c_gamma_k_H_square = pow(pba->c_gamma_over_c_fld*k/a_prime_over_a,2)*pba->cs2_fld;
 	/** The equation is too stiff for Runge-Kutta when c_gamma_k_H_square is large.
 	    Use the asymptotic solution Gamma=Gamma'=0 in that case.
@@ -8862,16 +8885,15 @@ int perturbations_derivs(double tau,
         class_call(background_w_fld(pba,a,&w_fld,&dw_over_da_fld,&integral_fld), pba->error_message, ppt->error_message);
         w_prime_fld = dw_over_da_fld * a_prime_over_a * a;
 
-        if (pba->has_GO == _TRUE_){
+        if (pba->has_GO == _TRUE_) {
 
-          cs2 = (2.*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*(-2.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*pow(pba->beta_GO,2.)*pba->Omega0_r
+          pba->cs2_fld= (2.*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*(-2.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*pow(pba->beta_GO,2.)*pba->Omega0_r
                 + pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) )
                 /(3.*pba->beta_GO*(3.*pow(a,1.+2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(1.-pba->alpha_GO+2.*pba->beta_GO)*(-2.*pba->alpha_GO+3.*pba->beta_GO)*pba->Omega0_m
                 + 4.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(-pba->alpha_GO+2.*pba->beta_GO)*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*pba->Omega0_r
                 - 2.*pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) );
-          ca2=cs2;
-          /*printf("Omega m: %f , Omega r: %f , cs2: %f , ca2: %f , w_fld: %f , a: %f  \n",pba->Omega0_m,pba->Omega0_r,cs2,ca2,w_fld,a);
-          */
+          cs2 = pba->cs2_fld;
+          ca2 = cs2;
           }
         else {
           ca2 = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
