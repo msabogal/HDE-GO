@@ -6906,12 +6906,8 @@ int perturbations_total_stress_energy(
         ppw->delta_rho_fld = ppw->pvecback[pba->index_bg_rho_fld]*y[ppw->pv->index_pt_delta_fld];
         ppw->rho_plus_p_theta_fld = (1.+w_fld)*ppw->pvecback[pba->index_bg_rho_fld]*y[ppw->pv->index_pt_theta_fld];
 
-        if (pba->has_GO == _TRUE_) {
-          ca2_fld = pba->cs2_fld;
-        }
-        else {
-          ca2_fld = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
-        }
+        ca2_fld = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
+
 	/** We must gauge transform the pressure perturbation from the fluid rest-frame to the gauge we are working in */
 	ppw->delta_p_fld = pba->cs2_fld * ppw->delta_rho_fld + (pba->cs2_fld-ca2_fld)*(3*a_prime_over_a*ppw->rho_plus_p_theta_fld/k/k);
       }
@@ -6938,7 +6934,7 @@ int perturbations_total_stress_energy(
 	}
         ppw->S_fld = ppw->pvecback[pba->index_bg_rho_fld]*(1.+w_fld)*1.5*a2/k2/a_prime_over_a*
           (ppw->rho_plus_p_theta/ppw->rho_plus_p_tot+k2*alpha);
-        // note that the last terms in the ratio do not include fld, that's correct, it's the whole point of the PPF scheme
+  // note that the last terms in the ratio do not include fld, that's correct, it's the whole point of the PPF scheme
 	/** We must now check the stiffenss criterion again and set Gamma_prime_fld accordingly. */
 	if (c_gamma_k_H_square > ppr->c_gamma_k_H_square_max){
 	  ppw->Gamma_prime_fld = 0.;
@@ -8892,13 +8888,12 @@ int perturbations_derivs(double tau,
                 /(3.*pba->beta_GO*(3.*pow(a,1.+2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(1.-pba->alpha_GO+2.*pba->beta_GO)*(-2.*pba->alpha_GO+3.*pba->beta_GO)*pba->Omega0_m
                 + 4.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(-pba->alpha_GO+2.*pba->beta_GO)*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*pba->Omega0_r
                 - 2.*pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) );
-          cs2 = pba->cs2_fld;
-          ca2 = cs2;
           }
-        else {
+
           ca2 = w_fld - w_prime_fld / 3. / (1.+w_fld) / a_prime_over_a;
           cs2 = pba->cs2_fld;
-          }
+          /*printf("a: %e , cs2: %e , ca2: %e \n",a,cs2,ca2);*/
+
 
         /** - ----> fluid density */ /*Aqui*/
 

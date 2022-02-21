@@ -102,6 +102,7 @@ cdef extern from "class.h":
         double tau_eq
         double alpha_GO
         double beta_GO
+        short  has_GO
 
     cdef struct thermodynamics:
         ErrorMsg error_message

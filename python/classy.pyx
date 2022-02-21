@@ -1832,6 +1832,10 @@ cdef class Class:
                 value = self.ba.T_idr/self.ba.T_cmb
             elif name == 'N_dg':
                 value = self.ba.Omega0_idr/self.ba.Omega0_g*8./7.*pow(11./4.,4./3.)
+            elif name == 'alpha_GO':
+                value = self.ba.alpha_GO
+            elif name == 'beta_GO':
+                value = self.ba.beta_GO
             elif name == 'Gamma_0_nadm':
                 value = self.th.a_idm_dr*(4./3.)*(self.ba.h*self.ba.h*self.ba.Omega0_idr)
             elif name == 'a_dark':

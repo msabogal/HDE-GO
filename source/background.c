@@ -707,6 +707,10 @@ int background_w_fld(                                 /* Aqui es donde se define
       + (-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*Omega_r) - pow(a,1. + 2.*pba->alpha_GO /pba->beta_GO)*(2.*pba->alpha_GO-3.*pba->beta_GO)*(-1.+pba->alpha_GO-2.*pba->beta_GO)*Omega_m
       - pow(a,2.*pba->alpha_GO /pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*Omega_r ) ) ;
 
+      if (*w_fld <= -1.){
+        class_stop(pba->error_message,"The value of w_fld can not be less than -1");
+      }
+
      } else
       {
       class_stop(pba->error_message,"The value of alpha or beta has not been declared");
@@ -740,9 +744,9 @@ int background_w_fld(                                 /* Aqui es donde se define
     *(2.-2.*pba->alpha_GO+3.*pba->beta_GO)*Omega_m*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO + 2.*Omega_m)
     + (-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*Omega_r) + 4.*pow(a,3.+ 2.*(1+pba->alpha_GO)/pba->beta_GO)*pow((-1.+pba->alpha_GO-2.*pba->beta_GO),2)*(pba->alpha_GO - 2.*pba->beta_GO)
     *Omega_r*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO + 2.*Omega_m) + (-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*Omega_r) ))
-    /(3.*pow(pba->beta_GO,2.)*pow( ( pow(a,1 + 2.*pba->alpha_GO/pba->beta_GO)*(2.*pba->alpha_GO-3.*pba->beta_GO)*(-1.+pba->alpha_GO-2.*pba->beta_GO)*Omega_m
+    /(3.*pow(pba->beta_GO,2.)*pow( (pow(a,1 + 2.*pba->alpha_GO/pba->beta_GO)*(2.*pba->alpha_GO-3.*pba->beta_GO)*(-1.+pba->alpha_GO-2.*pba->beta_GO)*Omega_m
     + pow(a,2.*pba->alpha_GO/pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*Omega_r + pow(a,4.+2./pba->beta_GO)
-    *( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO + 2.*Omega_m) + (-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*Omega_r) ) ,2.) );
+    *( -1.*(-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO + 2.*Omega_m) + (2.-2.*pba->alpha_GO+3.*pba->beta_GO)*Omega_r) ) ,2.) );
 
     break;
   }

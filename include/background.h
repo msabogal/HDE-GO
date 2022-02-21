@@ -16,7 +16,7 @@ enum spatial_curvature {flat,open,closed};
 
 /** list of possible parametrisations of the DE equation of state */
 
-enum equation_of_state {CLP, EDE, GO};
+enum equation_of_state {CLP,EDE,GO};
 
 /** list of formats for the vector of background quantities */
 
