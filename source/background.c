@@ -779,6 +779,12 @@ int background_w_fld(                                 /* Aqui es donde se define
     - pow(a,2.*pba->alpha_GO/pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*Omega_r)
     / ( (-1.+pba->alpha_GO -2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO-3.*pba->beta_GO)*(1-Omega_r-Omega_m)) );
 
+    pba->cs2_fld= (2.*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*(-2.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*(pba->alpha_GO-2.*pba->beta_GO)*pow(pba->beta_GO,2.)*pba->Omega0_r
+          + pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) )
+          /(3.*pba->beta_GO*(3.*pow(a,1.+2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(1.-pba->alpha_GO+2.*pba->beta_GO)*(-2.*pba->alpha_GO+3.*pba->beta_GO)*pba->Omega0_m
+          + 4.*pow(a,2.*pba->alpha_GO/pba->beta_GO)*pba->beta_GO*(-pba->alpha_GO+2.*pba->beta_GO)*(2.-2.*pba->alpha_GO + 3.*pba->beta_GO)*pba->Omega0_r
+          - 2.*pow(a,4.+(2./pba->beta_GO))*(pba->alpha_GO-1.)*( (-1.+pba->alpha_GO-2.*pba->beta_GO)*(-2.+2.*pba->alpha_GO - 3.*pba->beta_GO + 2.*pba->Omega0_m) + (-2.+2.*pba->alpha_GO - 3.*pba->beta_GO)*pba->Omega0_r ) ) );
+
     break;
   }
 

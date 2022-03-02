@@ -2895,23 +2895,10 @@ int input_read_parameters_species(struct file_content * pfc,
     }
     /** 8.a.2.4) Equation of state of the fluid in 'GO' case */
     if (pba->fluid_equation_of_state == GO) { /*Aqui se lee parametros GO*/
-    /* Read */
-               class_call(parser_read_double(pfc,"alpha_GO",&param1,&flag1,errmsg),
-               errmsg,
-               errmsg);
-               class_call(parser_read_double(pfc,"beta_GO",&param2,&flag2,errmsg),
-               errmsg,
-               errmsg);
-    /* Test */
-               class_test((flag1 == _FALSE_) || (flag2 == _FALSE_),
-               errmsg,
-               "You have to enter both 'alpha' and 'beta' at the same time.");
-    /* Complete set of parameters */
-      if ((flag1 == _TRUE_) && (flag2 == _TRUE_)){
-        pba->alpha_GO = param1;
-        pba->beta_GO = param2;
+      /* Read */
+        class_read_double("alpha_GO",pba->alpha_GO);
+        class_read_double("beta_GO",pba->beta_GO);
         pba->Omega0_lambda = 0.;
-      }
     }
 
   }
@@ -5369,6 +5356,9 @@ int input_default_params(struct background *pba,
   pba->wa_fld = 0.;
   /** 9.a.2.2) 'EDE' case */
   pba->Omega_EDE = 0.;
+  /** 9.a.2.3) 'GO' case */
+  pba->alpha_GO = 0.9652; /*Aqui*/
+  pba->beta_GO = 0.4826;
   /** 9.b) Omega scalar field */
   /** 9.b.1) Potential parameters and initial conditions */
   pba->scf_parameters = NULL;
