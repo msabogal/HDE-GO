@@ -2815,6 +2815,15 @@ int background_output_budget(
 
       if (pba->has_GO == _TRUE_) {
         class_print_species("Dark Energy Fluid with GO",fld); /* Aqui avisa que hay GO en salida*/
+        printf(" \n");
+        printf(" ---> Content added by GO \n");
+        class_print_GO("Radiation +","Radiation+");
+        class_print_GO("Matter +","Matter+");
+        printf(" ---> effective Content GO \n");
+        class_print_GO("Radiation effective GO","Radiation");
+        class_print_GO("Matter effective GO","Matter");
+        class_print_GO("Dark Energy Fluid effective GO","fld");
+        printf(" \n");
       }
       else {
       class_print_species("Dark Energy Fluid",fld);

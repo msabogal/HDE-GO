@@ -5357,8 +5357,8 @@ int input_default_params(struct background *pba,
   /** 9.a.2.2) 'EDE' case */
   pba->Omega_EDE = 0.;
   /** 9.a.2.3) 'GO' case */
-  pba->alpha_GO = 0.9652; /*Aqui*/
-  pba->beta_GO = 0.4826;
+  pba->alpha_GO = 1.; /*Aqui*/
+  pba->beta_GO = 0.5;
   /** 9.b) Omega scalar field */
   /** 9.b.1) Potential parameters and initial conditions */
   pba->scf_parameters = NULL;

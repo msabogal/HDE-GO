@@ -326,6 +326,24 @@ int string_begins_with(char* thestring, char beginchar);
 #define class_print_species(name,type) \
 printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,pba->Omega0_##type,pba->Omega0_##type*pba->h*pba->h);
 
+//Print for GO contributions
+#define class_print_GO(name,type){   \
+  if (type == "Matter"){ \
+    printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,(1. + (2.*pba->alpha_GO - 3.*pba->beta_GO)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO))*pba->Omega0_m,(1. + (2.*pba->alpha_GO - 3.*pba->beta_GO)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO))*pba->Omega0_m*pba->h*pba->h); \
+  } \
+  if (type == "Radiation"){ \
+    printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,(1. + (pba->alpha_GO - 2.*pba->beta_GO)/(1.-pba->alpha_GO + 2.*pba->beta_GO))*pba->Omega0_r,(1. + (pba->alpha_GO - 2.*pba->beta_GO)/(1.-pba->alpha_GO + 2.*pba->beta_GO))*pba->Omega0_r*pba->h*pba->h); \
+  } \
+  if (type == "fld"){ \
+    printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,(1. - (2.*pba->Omega0_m)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO) - (pba->Omega0_r)/(1.-pba->alpha_GO + 2.*pba->beta_GO)),(1. - (2.*pba->Omega0_m)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO) - (pba->Omega0_r)/(1.-pba->alpha_GO + 2.*pba->beta_GO))*pba->h*pba->h); \
+  } \
+  if (type == "Matter+"){ \
+    printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,((2.*pba->alpha_GO - 3.*pba->beta_GO)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO))*pba->Omega0_m,((2.*pba->alpha_GO - 3.*pba->beta_GO)/(2.-2.*pba->alpha_GO + 3.*pba->beta_GO))*pba->Omega0_m*pba->h*pba->h); \
+  } \
+  if (type == "Radiation+"){ \
+    printf("-> %-30s Omega = %-15g , omega = %-15g\n",name,((pba->alpha_GO - 2.*pba->beta_GO)/(1.-pba->alpha_GO + 2.*pba->beta_GO))*pba->Omega0_r,((pba->alpha_GO - 2.*pba->beta_GO)/(1.-pba->alpha_GO + 2.*pba->beta_GO))*pba->Omega0_r*pba->h*pba->h); \
+  } \
+ }
 /* Forward-Declare the structs of CLASS */
 struct background;
 struct thermodynamics;
