@@ -2899,8 +2899,20 @@ int input_read_parameters_species(struct file_content * pfc,
         class_read_double("alpha_GO",pba->alpha_GO);
         class_read_double("beta_GO",pba->beta_GO);
         pba->Omega0_lambda = 0.;
-    }
 
+        class_call(parser_read_string(pfc,"const_cs2",&string1,&flag1,errmsg),
+                   errmsg,
+                   errmsg);
+        if (flag1 == _TRUE_){
+          if(string_begins_with(string1,'y') || string_begins_with(string1,'Y')){
+            pba->const_cs2 = _TRUE_;
+            class_read_double("cs2_fld",pba->cs2_fld);
+          }
+          else {
+            pba->const_cs2 = _FALSE_;
+          }
+        }
+      }
   }
 
   /** 8.b) If Omega scalar field (SCF) is different from 0 */
@@ -5359,6 +5371,7 @@ int input_default_params(struct background *pba,
   /** 9.a.2.3) 'GO' case */
   pba->alpha_GO = 1.; /*Aqui*/
   pba->beta_GO = 0.5;
+  pba->const_cs2 = _FALSE_;
   /** 9.b) Omega scalar field */
   /** 9.b.1) Potential parameters and initial conditions */
   pba->scf_parameters = NULL;

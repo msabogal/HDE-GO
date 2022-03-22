@@ -1836,6 +1836,10 @@ cdef class Class:
                 value = self.ba.alpha_GO
             elif name == 'beta_GO':
                 value = self.ba.beta_GO
+            elif name == 'const_cs2':
+                value = self.ba.const_cs2
+            elif name == 'cs2_fld':
+                value = self.ba.cs2_fld    
             elif name == 'Gamma_0_nadm':
                 value = self.th.a_idm_dr*(4./3.)*(self.ba.h*self.ba.h*self.ba.Omega0_idr)
             elif name == 'a_dark':
