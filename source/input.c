@@ -2898,6 +2898,7 @@ int input_read_parameters_species(struct file_content * pfc,
       /* Read */
         class_read_double("alpha_GO",pba->alpha_GO);
         class_read_double("beta_GO",pba->beta_GO);
+        class_read_double("cs2_fld",pba->cs2_fld);
         pba->Omega0_lambda = 0.;
 
         class_call(parser_read_string(pfc,"const_cs2",&string1,&flag1,errmsg),
@@ -2906,7 +2907,6 @@ int input_read_parameters_species(struct file_content * pfc,
         if (flag1 == _TRUE_){
           if(string_begins_with(string1,'y') || string_begins_with(string1,'Y')){
             pba->const_cs2 = _TRUE_;
-            class_read_double("cs2_fld",pba->cs2_fld);
           }
           else {
             pba->const_cs2 = _FALSE_;
